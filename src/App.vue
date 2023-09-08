@@ -1,0 +1,17 @@
+<script setup lang="ts">
+import { RouterLink, RouterView } from 'vue-router'
+</script>
+
+<template>
+  <header>
+    Login Application UI
+  </header>
+
+  <RouterView />
+</template>
+
+<style scoped lang="scss">
+header {
+  font-size: larger;
+}
+</style>
