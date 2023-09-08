@@ -34,7 +34,7 @@ function onLoginFormSubmit() {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-    }).then(x=>x.json()).then(x=>alert(x))
+    }).then(x=>x.json()).then(x=>alert(JSON.stringify(x)))
 }
 
 </script>
