@@ -1,139 +1,92 @@
 <template>
-   <body class="wrapper"> 
-    <header>
-        <h2>Dashboard</H2>
-    </header>
-    <navbar/>
-    
-<div class="dashboardView">
-    <h2>Hello {{userDetails.firstName}}!</h2>
-    <div class="container">
-        <div class="item">
-    <table>
-        <tr>
-            <th>
-                Employee Details
-            </th>
+    <div class="wrapper">
+        <Navbar />
+        <header>
+            <h2>Dashboard</H2>
+        </header>
 
-        </tr>
+        <div class="dashboardView" v-if="userDetails !== undefined && userDetails.userDetailsdto !== undefined">
+            <h2>Hello {{ userDetails.userDetailsdto.firstName }}!</h2>
+            <div class="container">
+                <div class="item">
+                    <table>
+                        <tr>
+                            <th>
+                                Employee Details
+                            </th>
 
-        <tr>
-            <td>
-                Full Name
-            </td>
+                        </tr>
 
-            <td>
-                {{userDetails.firstName}} {{userDetails.lastName}}
-            </td>
+                        <tr>
+                            <td>
+                                Full Name
+                            </td>
 
-        </tr>
+                            <td>
+                                {{ userDetails.userDetailsdto.firstName }} {{ userDetails.userDetailsdto.lastName }}
+                            </td>
 
-        <tr>
-            <td>
-                Email
-            </td>
+                        </tr>
 
-            <td>
-                {{userDetails.userEmail}}
-            </td>
+                        <tr>
+                            <td>
+                                Email
+                            </td>
 
-        </tr>
+                            <td>
+                                {{ userDetails.userDetailsdto.userEmail }}
+                            </td>
 
-        <tr>
-            <td>
-                Role
-            </td>
+                        </tr>
 
-            <td>
-                {{userDetails.role}}
-            </td>
+                        <tr>
+                            <td>
+                                Role
+                            </td>
 
-        </tr>
+                            <td>
+                                {{ userDetails.userDetailsdto.role }}
+                            </td>
 
-    </table>
-    
-<br>
-<br>
-    <button @click="logout" id="btn">Logout   </button>
+                        </tr>
 
-    <!-- <button @click="user" id="btn">User   </button> -->
-    
-</div>
-</div>
-</div>
+                    </table>
+                </div>
+            </div>
+        </div>
 
-   </body>
+    </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
-// // import navbar from '../navbar.vue';
-// views:{
-//         navbar
+import Navbar from '@/components/Navbar.vue'
 
-//     }
+const router = useRouter()
+const userDetails = ref<any>({})
 
-const router  = useRouter()
-const userDetails  = ref<any>({})
-
-function logout(){
+function logout() {
     localStorage.removeItem('user')
     router.push('/')
 }
 
-// function user(){
-    
-//     router.push('/user')
-// }
-
-
-onMounted(()=>{
-    userDetails.value = JSON.parse(localStorage.getItem('user') ?? "{}" )
-    if (userDetails.value.id === undefined) {
+onMounted(() => {
+    userDetails.value = JSON.parse(localStorage.getItem('user') ?? "{}")
+    if (userDetails.value.userId === undefined) {
         router.push('/')
     }
-
-    // {
-    //     "id": 1,
-    //     "firstName": "Mansi",
-    //     "lastName": "Rani",
-    //     "userEmail": "mansi@gmail.com",
-    //     "role": "Employee",
-    //     "isStudent": false,
-    //     "userId": 1
-    // }
 })
 
 </script>
 
 <style>
-td,table {
-  border: 1px solid black;
-  text-align: left;
-  height: 40px;
-  width: 100%;
-  background-color: rgb(151, 228, 228);
+td,
+table {
+    border: 1px solid black;
+    text-align: left;
+    height: 40px;
+    width: 100%;
+    background-color: rgb(151, 228, 228);
 }
-
-.container{
-        width: 100vw;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        
-    }
-
-
-    #btn{
-        background-color: rgb(160, 157, 157);
-    }
-    
-
-
-
-    
-    
-
-    
 </style>
