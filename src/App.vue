@@ -3,9 +3,9 @@ import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
-  <header>
+  <!-- <header>
     Login Application UI
-  </header>
+  </header> -->
 
   <RouterView />
 </template>
