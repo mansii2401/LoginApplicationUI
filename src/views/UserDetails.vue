@@ -8,34 +8,37 @@
         <div class="container" v-if="userDetails !== undefined">
             <h3>Add Grades for {{ userDetails.firstName }} {{ userDetails.lastName }}</h3>
 
-            <div>
-                <button @click="addNewEntry">New Entry</button>
-                <button @click="submit"
-                    :disabled="marksheet.find(x => x.subjectId === 0 || x.gradeId === 0) || marksheet.length === 0">Submit</button>
-            </div>
-
-            <div class="marksheet">
-                <div class="marksheetItem" v-for="marksheetItem, index in marksheet" :key="index">
+            <div class="column">
+                <UserScoreTable :id="userId.toString()" />
+                <div>
                     <div>
-                        <label for="subject">Subject</label>
-                        <select name="subject" id="subject" v-model="marksheetItem.subjectId">
-                            <option
-                                v-for="subject in allSubjects.filter((x: any) => marksheet.map(y => y.subjectId).includes(x.subjectId) === false || x.subjectId === marksheetItem.subjectId)"
-                                :key="subject.subjectId" :value="subject.subjectId">
-                                {{ subject.subjectName }}
-                            </option>
-                        </select>
+                        <button @click="addNewEntry">New Entry</button>
+                        <button @click="submit"
+                            :disabled="marksheet.find(x => x.subject === '' || x.grade === '') || marksheet.length === 0">Submit</button>
                     </div>
-
-                    <div>
-                        <label for="grade">Grade</label>
-                        <select name="grade" id="grade" v-model="marksheetItem.gradeId">
-                            <option v-for="grade in allGrades" :key="grade.gradeId" :value="grade.gradeId">
-                                {{ grade.gradeName }}
-                            </option>
-                        </select>
+                    <div class="marksheet">
+                        <div class="marksheetItem" v-for="marksheetItem, index in marksheet" :key="index">
+                            <div>
+                                <label for="subject">Subject</label>
+                                <select name="subject" id="subject" v-model="marksheetItem.subject">
+                                    <option
+                                        v-for="subject in allSubjects.filter((subject: any) => marksheet.map(y => y.subject).includes(subject) === false || subject === marksheetItem.subject)"
+                                        :key="subject" :value="subject">
+                                        {{ subject }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="grade">Grade</label>
+                                <select name="grade" id="grade" v-model="marksheetItem.grade">
+                                    <option v-for="grade in allGrades" :key="grade" :value="grade">
+                                        {{ grade }}
+                                    </option>
+                                </select>
+                            </div>
+                            <button @click="marksheet.splice(index, 1)">Delete</button>
+                        </div>
                     </div>
-                    <button @click="marksheet.splice(index, 1)">Delete</button>
                 </div>
             </div>
 
@@ -45,8 +48,10 @@
 
 <script lang="ts" setup>
 import Navbar from '@/components/Navbar.vue';
+import UserScoreTable from '@/components/UserScoreTable.vue';
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
+
 
 const route = useRoute();
 
@@ -60,19 +65,12 @@ const marksheet = ref<any[]>([])
 
 async function addNewEntry() {
     marksheet.value.push({
-        subjectId: 0,
         subject: '',
-        gradeId: 0,
         grade: ''
     })
 }
 
 async function submit() {
-    for (const marksheetItem of marksheet.value) {
-        marksheetItem.subject = allSubjects.value.find((x: any) => x.subjectId === marksheetItem.subjectId).subjectName
-        marksheetItem.grade = allGrades.value.find((x: any) => x.gradeId === marksheetItem.gradeId).gradeName
-    }
-
     const response = await fetch(`${import.meta.env.VITE_APP_BASE_URL}/api/User/ScoreList`, {
         method: "POST",
         body: JSON.stringify({
@@ -88,6 +86,7 @@ async function submit() {
     const responseJson = await response.json()
     if (responseJson.result != null) {
         alert('Success')
+        window.location.reload()
     }
     else {
         alert(`Error: ${responseJson.statusMessage}`)
@@ -111,7 +110,7 @@ async function getGrades() {
 }
 
 async function getUserDetails() {
-    const response = await fetch(`${import.meta.env.VITE_APP_BASE_URL}/api/User/UserDetails/id?userid=${userId}`);
+    const response = await fetch(`${import.meta.env.VITE_APP_BASE_URL}/api/User/UserDetails/${userId}`);
 
     const responseJson = await response.json()
 
@@ -137,6 +136,13 @@ onMounted(async () => {
     button {
         margin: 10px;
     }
+
+    .column {
+        width: 80%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
 }
 
 .marksheet {
@@ -149,7 +155,7 @@ onMounted(async () => {
 
         grid-template-columns: 1fr 1fr auto;
 
-        div{
+        div {
             display: flex;
             gap: 10px;
         }

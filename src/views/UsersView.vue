@@ -10,24 +10,22 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Username</th>
                             <th>First Name</th>
                             <th>Last Name</th>
                             <th>Email</th>
-                            <th>Is Student</th>
+                            <th>Role</th>
                             <th>View</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="user in allUsers" :key="user.userId">
-                            <td>{{ user.userName }}</td>
                             <td>{{ user.firstName }}</td>
                             <td>{{ user.lastName }}</td>
                             <td>{{ user.userEmail }}</td>
-                            <td>{{ user.isStudent }}</td>
+                            <td>{{ user.role }}</td>
                             <td>
                                 <router-link :to="{ name: 'userDetails', params: { id: user.userId } }"
-                                    v-if="user.isStudent">
+                                    v-if="user.role === 'Student'">
                                     View
                                 </router-link>
                             </td>

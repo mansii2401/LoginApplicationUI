@@ -5,8 +5,8 @@
             <h2>Dashboard</H2>
         </header>
 
-        <div class="dashboardView" v-if="userDetails !== undefined && userDetails.userDetailsdto !== undefined">
-            <h2>Hello {{ userDetails.userDetailsdto.firstName }}!</h2>
+        <div class="dashboardView" v-if="userDetails !== undefined && userDetails !== undefined">
+            <h2>Hello {{ userDetails.firstName }}!</h2>
             <div class="container">
                 <div class="item">
                     <table>
@@ -23,7 +23,7 @@
                             </td>
 
                             <td>
-                                {{ userDetails.userDetailsdto.firstName }} {{ userDetails.userDetailsdto.lastName }}
+                                {{ userDetails.firstName }} {{ userDetails.lastName }}
                             </td>
 
                         </tr>
@@ -34,7 +34,7 @@
                             </td>
 
                             <td>
-                                {{ userDetails.userDetailsdto.userEmail }}
+                                {{ userDetails.userEmail }}
                             </td>
 
                         </tr>
@@ -45,11 +45,9 @@
                             </td>
 
                             <td>
-                                {{ userDetails.userDetailsdto.role }}
+                                {{ userDetails.role }}
                             </td>
-
                         </tr>
-
                     </table>
                 </div>
             </div>
@@ -65,11 +63,6 @@ import Navbar from '@/components/Navbar.vue'
 
 const router = useRouter()
 const userDetails = ref<any>({})
-
-function logout() {
-    localStorage.removeItem('user')
-    router.push('/')
-}
 
 onMounted(() => {
     userDetails.value = JSON.parse(localStorage.getItem('user') ?? "{}")
